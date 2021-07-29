@@ -2,7 +2,7 @@
 ---------------------------------------------------
 PROJECT - CP386 Assignment 4
 FILE - 
-AUTHOR - Brayden McKay (170917400) & Jordan Angst ()
+AUTHOR - Brayden McKay (170917400) & Jordan Angst (190988840)
 VERSION - July 28th 2021
 ---------------------------------------------------
 */
