@@ -75,3 +75,8 @@ int releaseResource(int customer_number, int *request) {
 
 int safteyAlgorithm(int customer_number, int *r) {
 }
+
+void isSafe()
+{
+    printf("State is safe, and request is satisfied");    
+}
