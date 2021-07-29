@@ -15,8 +15,8 @@ VERSION - July 28th 2021
 #include <string.h>
 int p = 5;  //number of processes
 int m = 4;  //number of resource types
-int request[m] //request array
-int release[m] //release array
+int request[m]; //request array
+int release[m]; //release array
 int maximum[p][m];
 int allocation[p][m];
 int available[m];
@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
 int openFile(char* filename) {
     char content[128];
     FILE *fp;
+    int totalCustomers;
     fp = fopen(filename,"r");
     
     if(fp == NULL) {
@@ -37,6 +38,7 @@ int openFile(char* filename) {
         return 0;
     }
     
+    char line[sizeof(content)];
     while(fgets(line, sizeof(content), fp) != NULL) {
         totalCustomers++;
     }   
@@ -52,7 +54,7 @@ int requestResource(int customer_number, int r) {
         }
     }
     
-    if(!safteyAlgorithm(cutomer_number, r)) {   //checks if meeting saftey standards
+    if(!safteyAlgorithm(customer_number, r)) {   //checks if meeting saftey standards
         return -1;
     }
     
@@ -65,7 +67,7 @@ int requestResource(int customer_number, int r) {
 
 int releaseResource(int customer_number, int *request) {
     for(int i=0; i < 4; i++){
-        available[i] += releasel[i];  //add available amount of resource
+        available[i] += release[i];  //add available amount of resource
         allocation[customer_number][i] -= release[i]; //subtract allocated amount for customer
     }
     return 0;
