@@ -27,7 +27,7 @@ int need[p][m];
 /* DECLARE FUNCTIONS */
 int openFile(char* filename);
 
-int requestResource(int customer_number, int r);
+int requestResource(int customer_number, int r[]);
 
 int releaseResource(int customer_number, int *request);
 
@@ -60,9 +60,18 @@ int openFile(char* filename)
     }   
 }
 
-int requestResource(int customer_number, int r) 
+int requestResource(int customer_number, int r[]) 
 {
-    for(int i=0; i < 4; i++) 
+    // set need = maximum - allocation
+    for (int i = 0; i < p; i++)
+    {
+	for (int j = 0; j < m; j++)
+	{
+	    need[i][j] = maximum[i][j] - allocation[i][j];
+	}
+    }
+	
+    for (int i = 0; i < m; i++) 
     {
 	//if not enough customers
         if(r[i] > maximum[customer_number][i])
@@ -83,13 +92,18 @@ int requestResource(int customer_number, int r)
         return -1;
     }
     
-    for(int i=0; i < 4; i++) 
+    for(int i = 0; i < p; i++) 
     {
-	//add allocation to each customer
-        allocation[customer_number][i] += r[i]; 
+	for (int j = 0; j < m; j++)
+    	{
+	    //add allocation to each customer
+            allocation[customer_number][j] += r[i]; 
 	    
-	//subtract available amount of resource
-        available[i] -= r[i];   
+	    //subtract available amount of resource
+            available[i] -= r[i];  
+		
+	    need[i][j] -= r[i];
+	}
     }
     return 0;
 }
