@@ -54,9 +54,14 @@ int openFile(char* filename)
     }
     
     char line[sizeof(content)];
-    while(fgets(line, sizeof(content), fp) != NULL) 
+    while(line = fgetc(fp)) != EOF) 
     {
-        totalCustomers++;
+	if (line == '\n') {
+		totalCustomers++;
+	}
+	//in the event this line of the file is empty
+	else if ((line = fgetc(fp)) == EOF)
+		totalCustomers--;
     }   
 }
 
