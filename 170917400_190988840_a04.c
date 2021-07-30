@@ -13,8 +13,9 @@ VERSION - July 28th 2021
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
-int p = 5;  //number of processes
-int m = 4;  //number of resource types
+
+#define p 5  //number of processes
+#define m 4  //number of resource types
 int request[m]; //request array
 int release[m]; //release array
 int maximum[p][m];
