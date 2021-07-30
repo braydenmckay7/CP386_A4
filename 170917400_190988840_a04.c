@@ -37,13 +37,24 @@ int safetyAlgorithm();
 
 void isSafe();
 
-void printMax();
+void printMaximum();
+
+void printAllocated();
+
+void printNeed();
 
 int main(int argc, char *argv[])
 {
-	printf("Number of Customers: %c", p);
-
 	openFile("sample4_in.txt");
+
+	// p not printing
+	printf("Number of Customers: %c\n", p);
+
+	// not done
+	printf("Currently Available resources: \n");
+
+	printf("Maximum resources from file:\n");
+	printMaximum();
 }
 
 int openFile(char* filename)
@@ -52,11 +63,28 @@ int openFile(char* filename)
 	FILE *fp;
 	int totalCustomers;
 	fp = fopen(filename,"r");
+	int array[20];
+	int temp = 0;
 
 	if(fp == NULL)
 	{
 		printf("File not found");
         	return 0;
+	}
+
+	// Fill maximum array
+	for (int i = 0; i < 20; i++)
+	{
+		fscanf(fp, "%d,", &array[i]);
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			maximum[i][j] = array[temp];
+			temp++;
+		}
 	}
 
 	char line[sizeof(content)];
@@ -74,6 +102,7 @@ int openFile(char* filename)
 			totalCustomers--;
 		}
 	}
+	fclose(fp);
 
 	return 0;
 }
@@ -190,7 +219,7 @@ void isSafe()
 	printf("State is safe, and request is satisfied");
 }
 
-void printMax()
+void printMaximum()
 {
 	for (int i = 0; i < 5; i++)
 	{
@@ -198,7 +227,39 @@ void printMax()
 		{
 			printf("%d ", maximum[i][j]);
 
-			if(j == 4)
+			if (j == 3)
+			{
+				printf("\n");
+			}
+		}
+	}
+}
+
+void printAllocated()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			printf("%d ", allocation[i][j]);
+
+			if (j == 3)
+			{
+				printf("\n");
+			}
+		}
+	}
+}
+
+void printNeed()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			printf("%d ", need[i][j]);
+
+			if (j == 3)
 			{
 				printf("\n");
 			}
