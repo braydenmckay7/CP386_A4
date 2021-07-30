@@ -99,19 +99,22 @@ int safetyAlgorithm(int customer_number, int *r)
 
 	for (int i = 0; i < p; i++)
 	{
-		// find i that finish[i] = false and need[i] <= work[i]
-		if (finish[i] == 0 && need[i] <= work[i])
+		for (int j = 0; j < m; j++)
 		{
-			work = work + allocation[i];
-			finish[i] = 1;
-		}
+			// find i that finish[i] = false and need[i] <= work[i]
+			if (finish[i] == 0 && need[i][j] <= work[i])
+			{
+				work[i] += allocation[i][j];
+				finish[i] = 1;
+			}
 
-		else
-		{
-			break;
-		}
+			else
+			{
+				break;
+			}
 
-		result = 1;
+			result = 1;
+		}
 	}
 
 	return result;
