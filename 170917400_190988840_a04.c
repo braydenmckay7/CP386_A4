@@ -39,7 +39,9 @@ void isSafe();
 
 int main(int argc, char *argv[])
 {
-    openFile("sample4_in.txt");
+	printf("Number of Customers: %c", p);
+
+	openFile("sample4_in.txt");
 }
 
 int openFile(char* filename)
