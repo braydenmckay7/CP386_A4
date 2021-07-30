@@ -189,3 +189,19 @@ void isSafe()
 {
 	printf("State is safe, and request is satisfied");
 }
+
+void printMax()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			printf("%d ", maximum[i][j]);
+
+			if(j == 4)
+			{
+				printf("\n");
+			}
+		}
+	}
+}
