@@ -37,6 +37,8 @@ int safetyAlgorithm();
 
 void isSafe();
 
+void printMax();
+
 int main(int argc, char *argv[])
 {
 	printf("Number of Customers: %c", p);
