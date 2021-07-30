@@ -14,6 +14,7 @@ VERSION - July 28th 2021
 #include <pthread.h>
 #include <string.h>
 
+/* GLOBAL VARIABLES */
 #define p 5  //number of processes
 #define m 4  //number of resource types
 int request[m]; //request array
@@ -22,54 +23,86 @@ int maximum[p][m];
 int allocation[p][m];
 int available[m];
 int need[p][m];
+
+/* DECLARE FUNCTIONS */
+int openFile(char* filename);
+
+int requestResource(int customer_number, int r);
+
+int releaseResource(int customer_number, int *request);
+
+int safetyAlgorithm();
+
+void isSafe();
     
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
     openFile("sample4_in.txt");
-   
 }
 
-int openFile(char* filename) {
+int openFile(char* filename) 
+{
     char content[128];
     FILE *fp;
     int totalCustomers;
     fp = fopen(filename,"r");
     
-    if(fp == NULL) {
+    if(fp == NULL) 
+    {
         printf("File not found");
         return 0;
     }
     
     char line[sizeof(content)];
-    while(fgets(line, sizeof(content), fp) != NULL) {
+    while(fgets(line, sizeof(content), fp) != NULL) 
+    {
         totalCustomers++;
     }   
 }
 
-int requestResource(int customer_number, int r) {
-    for(int i=0; i < 4; i++) {
-        if(r[i] > maximum[customer_number][i]){ //if not enough customers
+int requestResource(int customer_number, int r) 
+{
+    for(int i=0; i < 4; i++) 
+    {
+	//if not enough customers
+        if(r[i] > maximum[customer_number][i])
+	{ 
             return -1;
         }
-        else if(r[i] > available[i]){   //if not enough resources
+	    
+	//if not enough resources
+        else if(r[i] > available[i])
+	{   
             return -1;
         }
     }
     
-    if(!safetyAlgorithm(customer_number, r)) {   //checks if meeting saftey standards
+    //checks if meeting safety standards
+    if(safetyAlgorithm() == 0) 
+    {   
         return -1;
     }
     
-    for(int i=0; i < 4; i++) {
-        allocation[customer_number][i] += r[i]; //add allocation to each customer
-        available[i] -= r[i];   //subtract available amount of resource
+    for(int i=0; i < 4; i++) 
+    {
+	//add allocation to each customer
+        allocation[customer_number][i] += r[i]; 
+	    
+	//subtract available amount of resource
+        available[i] -= r[i];   
     }
     return 0;
 }
 
-int releaseResource(int customer_number, int *request) {
-    for(int i=0; i < 4; i++){
-        available[i] += release[i];  //add available amount of resource
-        allocation[customer_number][i] -= release[i]; //subtract allocated amount for customer
+int releaseResource(int customer_number, int *request) 
+{
+    for(int i=0; i < 4; i++)
+    {
+	//add available amount of resource
+        available[i] += release[i];  
+	    
+	//subtract allocated amount for customer
+        allocation[customer_number][i] -= release[i]; 
     }
     return 0;
 }
