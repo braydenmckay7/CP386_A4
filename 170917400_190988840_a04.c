@@ -54,7 +54,7 @@ int requestResource(int customer_number, int r) {
         }
     }
     
-    if(!safteyAlgorithm(customer_number, r)) {   //checks if meeting saftey standards
+    if(!safetyAlgorithm(customer_number, r)) {   //checks if meeting saftey standards
         return -1;
     }
     
@@ -73,7 +73,47 @@ int releaseResource(int customer_number, int *request) {
     return 0;
 }
 
-int safteyAlgorithm(int customer_number, int *r) {
+int safetyAlgorithm(int customer_number, int *r) 
+{
+    int result;
+
+	result = 0;
+
+	// set need = maximum - allocation
+	for (int i = 0; i < p; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			need[i][j] = maximum[i][j] - allocation[i][j];
+		}
+	}
+
+	// set finish[i] to false
+	// set work = available
+	for (int i = 0; i < p - 1; i++)
+	{
+		finish[i] = 0;
+		work[i] = available[i];
+	}
+
+	for (int i = 0; i < p; i++)
+	{
+		// find i that finish[i] = false and need[i] <= work[i]
+		if (finish[i] == 0 && need[i] <= work[i])
+		{
+			work = work + allocation[i];
+			finish[i] = 1;
+		}
+
+		else
+		{
+			break;
+		}
+
+		result = 1;
+	}
+
+	return result;
 }
 
 void isSafe()
