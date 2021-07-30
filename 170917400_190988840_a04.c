@@ -1,7 +1,7 @@
 /*
 ---------------------------------------------------
 PROJECT - CP386 Assignment 4
-FILE - 
+FILE -
 AUTHOR - Brayden McKay (170917400) & Jordan Angst (190988840)
 VERSION - July 28th 2021
 ---------------------------------------------------
@@ -23,6 +23,8 @@ int maximum[p][m];
 int allocation[p][m];
 int available[m];
 int need[p][m];
+int work[m];
+int finish[p];
 
 /* DECLARE FUNCTIONS */
 int openFile(char* filename);
@@ -34,25 +36,25 @@ int releaseResource(int customer_number, int *request);
 int safetyAlgorithm();
 
 void isSafe();
-    
-int main(int argc, char *argv[]) 
+
+int main(int argc, char *argv[])
 {
     openFile("sample4_in.txt");
 }
 
-int openFile(char* filename) 
+int openFile(char* filename)
 {
     char content[128];
     FILE *fp;
     int totalCustomers;
     fp = fopen(filename,"r");
-    
-    if(fp == NULL) 
+
+    if(fp == NULL)
     {
         printf("File not found");
         return 0;
     }
-    
+
     char line[sizeof(content)];
     while(line = fgetc(fp)) != EOF) 
     {
@@ -83,21 +85,21 @@ int requestResource(int customer_number, int r[])
 	{ 
             return -1;
         }
-	    
+
 	//if not enough resources
         else if(r[i] > available[i])
-	{   
+	{
             return -1;
         }
     }
-    
+
     //checks if meeting safety standards
-    if(safetyAlgorithm() == 0) 
-    {   
+    if(safetyAlgorithm() == 0)
+    {
         return -1;
     }
-    
-    for(int i = 0; i < p; i++) 
+
+    for(int i = 0; i < p; i++)
     {
 	for (int j = 0; j < m; j++)
     	{
@@ -105,7 +107,7 @@ int requestResource(int customer_number, int r[])
             allocation[customer_number][j] += r[i]; 
 	    
 	    //subtract available amount of resource
-            available[i] -= r[i];  
+            available[i] -= r[i];
 		
 	    need[i][j] -= r[i];
 	}
@@ -113,20 +115,20 @@ int requestResource(int customer_number, int r[])
     return 0;
 }
 
-int releaseResource(int customer_number, int *request) 
+int releaseResource(int customer_number, int *request)
 {
     for(int i=0; i < 4; i++)
     {
 	//add available amount of resource
-        available[i] += release[i];  
-	    
+        available[i] += release[i];
+
 	//subtract allocated amount for customer
-        allocation[customer_number][i] -= release[i]; 
+        allocation[customer_number][i] -= release[i];
     }
     return 0;
 }
 
-int safetyAlgorithm(int customer_number, int *r) 
+int safetyAlgorithm()
 {
     int result;
 
@@ -174,5 +176,5 @@ int safetyAlgorithm(int customer_number, int *r)
 
 void isSafe()
 {
-    printf("State is safe, and request is satisfied");    
+    printf("State is safe, and request is satisfied");
 }
