@@ -25,6 +25,7 @@ int available[m];
 int need[p][m];
 int work[m];
 int finish[p];
+int safeSequence[p];
 
 /* DECLARE FUNCTIONS */
 int openFile(char* filename);
@@ -170,6 +171,7 @@ int releaseResource(int customer_number, int *request)
 int safetyAlgorithm()
 {
 	int result;
+	int a=0;
 
 	result = 0;
 
@@ -193,6 +195,7 @@ int safetyAlgorithm()
 			{
 				work[i] += allocation[i][j];
 				finish[i] = 1;
+				safeSequence[a++] = i;
 			}
 
 			else
@@ -245,7 +248,16 @@ void getInput()
 		
 		else if (strcmp(useable_input, "Run") == 0)
 		{
-
+			int valid = isSafe()
+			int safeSequence[];
+			
+			if (valid == 1) {
+				safteyAlgorithm(safeSequence[]);
+				printf("Safe Sequence: ");
+				for(int i=0; i<p; i++) {
+					printf("%d", safeSequence[i];
+				}
+			}
 		}
 
 		else
