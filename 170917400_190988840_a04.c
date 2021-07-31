@@ -168,7 +168,7 @@ int releaseResource(int customer_number, int *request)
     return 0;
 }
 
-int safetyAlgorithm()
+int safetyAlgorithm(safeSequence[])
 {
 	int result;
 	int a=0;
