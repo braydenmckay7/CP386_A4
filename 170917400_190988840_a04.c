@@ -37,11 +37,17 @@ int safetyAlgorithm();
 
 void isSafe();
 
+void getInput();
+
+void printAvailable();
+
 void printMaximum();
 
-void printAllocated();
+void printAllocation();
 
 void printNeed();
+
+void setNeed();
 
 int main(int argc, char *argv[])
 {
@@ -52,8 +58,9 @@ int main(int argc, char *argv[])
 	// not done
 	printf("Currently Available resources: \n");
 
-	printf("Maximum resources from file:\n");
 	printMaximum();
+	
+	getInput();
 }
 
 int openFile(char* filename)
@@ -62,7 +69,7 @@ int openFile(char* filename)
 	FILE *fp;
 	int totalCustomers;
 	fp = fopen(filename,"r");
-	int array[20];
+	int max_array[20];
 	int temp = 0;
 
 	if(fp == NULL)
@@ -74,14 +81,14 @@ int openFile(char* filename)
 	// Fill maximum array
 	for (int i = 0; i < 20; i++)
 	{
-		fscanf(fp, "%d,", &array[i]);
+		fscanf(fp, "%d,", &max_array[i]);
 	}
 
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			maximum[i][j] = array[temp];
+			maximum[i][j] = max_array[temp];
 			temp++;
 		}
 	}
@@ -109,13 +116,7 @@ int openFile(char* filename)
 int requestResource(int customer_number, int r[])
 {
 	// set need = maximum - allocation
-	for (int i = 0; i < p; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			need[i][j] = maximum[i][j] - allocation[i][j];
-		}
-	}
+	setNeed();
 
 	for (int i = 0; i < m; i++)
 	{
@@ -133,12 +134,12 @@ int requestResource(int customer_number, int r[])
 	}
 
 	//checks if meeting safety standards
-	if(safetyAlgorithm() == 0)
+	if (safetyAlgorithm() == 0)
 	{
 		return -1;
 	}
 	
-	for(int i = 0; i < p; i++)
+	for (int i = 0; i < p; i++)
 	{
 		for (int j = 0; j < m; j++)
 		{
@@ -156,7 +157,7 @@ int requestResource(int customer_number, int r[])
 
 int releaseResource(int customer_number, int *request)
 {
-    for(int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
 	//add available amount of resource
         available[i] += release[i];
@@ -174,13 +175,7 @@ int safetyAlgorithm()
 	result = 0;
 
 	// set need = maximum - allocation
-	for (int i = 0; i < p; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			need[i][j] = maximum[i][j] - allocation[i][j];
-		}
-	}
+	setNeed();
 
 	// set finish[i] to false
 	// set work = available
@@ -215,11 +210,60 @@ int safetyAlgorithm()
 
 void isSafe()
 {
-	printf("State is safe, and request is satisfied");
+	if (safetyAlgorithm() == 1)
+	{
+		printf("State is safe, and request is satisfied\n");
+	}
+
+	else
+	{
+		printf("State is not safe. Request is not satisfied\n");
+	}
+}
+
+void getInput()
+{
+	char input[12];
+	int flag = 1;
+	//int alloc_array[20];
+	//int count = 0;
+
+	while (flag == 1)
+	{
+		printf("Enter Command: ");
+
+		fgets(input, 12, stdin);
+
+		char *temp = strtok(input, "\n\r");
+
+		if (strcmp(temp, "Status") == 0)
+		{
+			flag = 0;
+			printAvailable();
+			printMaximum();
+			printAllocation();
+			printNeed();
+		}
+
+		else
+		{
+			//alloc_array[0 + count] = temp[5];
+
+			printf("you entered: %s", input);
+			isSafe();
+		}
+	}
+}
+
+void printAvailable()
+{
+	printf("Available Resources: \n");
 }
 
 void printMaximum()
 {
+	printf("Maximum Resources: \n");
+	
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -234,8 +278,10 @@ void printMaximum()
 	}
 }
 
-void printAllocated()
+void printAllocation()
 {
+	printf("Allocated Resources: \n");
+	
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -252,6 +298,10 @@ void printAllocated()
 
 void printNeed()
 {
+	printf("Need Resources: \n");
+
+	setNeed();
+	
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -262,6 +312,17 @@ void printNeed()
 			{
 				printf("\n");
 			}
+		}
+	}
+}
+
+void setNeed()
+{
+	for (int i = 0; i < p; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			need[i][j] = maximum[i][j] - allocation[i][j];
 		}
 	}
 }
