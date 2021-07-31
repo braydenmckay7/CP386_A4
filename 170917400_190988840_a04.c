@@ -244,6 +244,11 @@ void getInput()
 			printAllocation();
 			printNeed();
 		}
+		
+		else if (strcmp(useable_input, "Run") == 0)
+		{
+
+		}
 
 		else
 		{
