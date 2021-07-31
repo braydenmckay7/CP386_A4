@@ -249,13 +249,13 @@ void getInput()
 		else if (strcmp(useable_input, "Run") == 0)
 		{
 			int valid = isSafe()
-			int safeSequence[];
+			int safeSequence[p];
 			
 			if (valid == 1) {
-				safteyAlgorithm(safeSequence[]);
+				safteyAlgorithm(safeSequence);
 				printf("Safe Sequence: ");
 				for(int i=0; i<p; i++) {
-					printf("%d", safeSequence[i];
+					printf("%d", safeSequence[i]);
 				}
 			}
 		}
