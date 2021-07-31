@@ -225,7 +225,7 @@ void isSafe()
 
 void getInput()
 {
-	char input[12];
+	char input[20];
 	int flag = 1;
 	int customer_number, count = 4;
 	int request[4];
@@ -234,7 +234,7 @@ void getInput()
 	{
 		printf("Enter Command: ");
 
-		fgets(input, 12, stdin);
+		fgets(input, 20, stdin);
 
 		char *useable_input = strtok(input, "\n\r");
 
@@ -272,7 +272,7 @@ void getInput()
 
 void printAvailable()
 {
-	printf("Available Resources: ");
+	printf("Available Resources: \n");
 	for (int i = 0; i < 4; i++)
 	{
 		printf("%d ", available[i]);
