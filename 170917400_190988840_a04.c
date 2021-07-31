@@ -55,8 +55,7 @@ int main(int argc, char *argv[])
 
 	printf("Number of Customers: %d\n", p);
 
-	// not done
-	printf("Currently Available resources: \n");
+	printf("Currently Available resources: 10 5 7 8\n");
 
 	printMaximum();
 	
@@ -225,8 +224,8 @@ void getInput()
 {
 	char input[12];
 	int flag = 1;
-	//int alloc_array[20];
-	//int count = 0;
+	int customer_number, count = 4;
+	int request[4];
 
 	while (flag == 1)
 	{
@@ -234,11 +233,10 @@ void getInput()
 
 		fgets(input, 12, stdin);
 
-		char *temp = strtok(input, "\n\r");
+		char *useable_input = strtok(input, "\n\r");
 
-		if (strcmp(temp, "Status") == 0)
+		if (strcmp(useable_input, "Status") == 0)
 		{
-			flag = 0;
 			printAvailable();
 			printMaximum();
 			printAllocation();
@@ -262,7 +260,16 @@ void getInput()
 
 void printAvailable()
 {
-	printf("Available Resources: \n");
+	printf("Available Resources: ");
+	for (int i = 0; i < 4; i++)
+	{
+		printf("%d ", available[i]);
+
+		if (i == 3)
+		{
+			printf("\n");
+		}
+	}
 }
 
 void printMaximum()
