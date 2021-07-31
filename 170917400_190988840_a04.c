@@ -47,8 +47,7 @@ int main(int argc, char *argv[])
 {
 	openFile("sample4_in.txt");
 
-	// p not printing
-	printf("Number of Customers: %c\n", p);
+	printf("Number of Customers: %d\n", p);
 
 	// not done
 	printf("Currently Available resources: \n");
