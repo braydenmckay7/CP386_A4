@@ -32,7 +32,7 @@ int openFile(char* filename);
 
 int requestResource(int customer_number, int r[]);
 
-int releaseResource(int customer_number, int *request);
+int releaseResource(int customer_number, int *r);
 
 int safetyAlgorithm();
 
@@ -50,16 +50,23 @@ void printNeed();
 
 void setNeed();
 
+void run(int safe_sequence[]);
+
 int main(int argc, char *argv[])
 {
 	openFile("sample4_in.txt");
 
 	printf("Number of Customers: %d\n", p);
 
-	printf("Currently Available resources: 10 5 7 8\n");
+	available[0] = 10;
+	available[1] = 5;
+	available[2] = 7;
+	available[3] = 8;
+
+	printAvailable();
 
 	printMaximum();
-	
+
 	getInput();
 }
 
@@ -75,7 +82,7 @@ int openFile(char* filename)
 	if(fp == NULL)
 	{
 		printf("File not found");
-        	return 0;
+		return 0;
 	}
 
 	// Fill maximum array
@@ -118,60 +125,60 @@ int requestResource(int customer_number, int r[])
 	// set need = maximum - allocation
 	setNeed();
 
-	for (int i = 0; i < m; i++)
-	{
-		//if not enough customers
-		if(r[i] > maximum[customer_number][i])
-		{
-			return -1;
-		}
+    for (int i = 0; i < m; i++)
+    {
+    	//if not enough customers
+        if(r[i] > maximum[customer_number][i])
+        {
+            return -1;
+        }
 
-		//if not enough resources
-		else if(r[i] > available[i])
-		{
-			return -1;
-		}
-	}
+        //if not enough resources
+        else if(r[i] > available[i])
+        {
+            return -1;
+        }
+    }
 
-	//checks if meeting safety standards
-	if (safetyAlgorithm() == 0)
-	{
-		return -1;
-	}
-	
-	for (int i = 0; i < p; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			//add allocation to each customer
-			allocation[customer_number][j] += r[i];
-	    
-			//subtract available amount of resource
-			available[i] -= r[i];
-		
-			need[i][j] -= r[i];
-		}
-	}
-	return 0;
-}
+    //checks if meeting safety standards
+    if (safetyAlgorithm() == 0)
+    {
+        return -1;
+    }
 
-int releaseResource(int customer_number, int *request)
-{
     for (int i = 0; i < 4; i++)
     {
-	//add available amount of resource
-        available[i] += release[i];
+    		//add allocation to each customer
+    		allocation[customer_number][i] += r[i];
 
-	//subtract allocated amount for customer
-        allocation[customer_number][i] -= release[i];
+    		//subtract available amount of resource
+    		available[i] -= r[i];
+
+    		need[customer_number][i] -= r[i];
     }
     return 0;
 }
 
-int safetyAlgorithm(safeSequence[])
+int releaseResource(int customer_number, int *r)
+{
+	printf("The resources have been released successfully");
+
+    for (int i = 0; i < 4; i++)
+    {
+    	//add available amount of resource
+        available[i] += r[i];
+
+        //subtract allocated amount for customer
+        allocation[customer_number][i] -= r[i];
+
+		need[customer_number][i] += r[i];
+    }
+    return 0;
+}
+
+int safetyAlgorithm()
 {
 	int result;
-	int a=0;
 
 	result = 0;
 
@@ -195,7 +202,6 @@ int safetyAlgorithm(safeSequence[])
 			{
 				work[i] += allocation[i][j];
 				finish[i] = 1;
-				safeSequence[a++] = i;
 			}
 
 			else
@@ -227,8 +233,8 @@ void getInput()
 {
 	char input[20];
 	int flag = 1;
-	int customer_number, count = 4;
-	int request[4];
+	int customer_number = 0, count;
+	int input_array[4];
 
 	while (flag == 1)
 	{
@@ -245,27 +251,61 @@ void getInput()
 			printAllocation();
 			printNeed();
 		}
-		
+
 		else if (strcmp(useable_input, "Run") == 0)
 		{
-			int valid = isSafe()
-			int safeSequence[p];
-			
-			if (valid == 1) {
-				safteyAlgorithm(safeSequence);
-				printf("Safe Sequence: ");
-				for(int i=0; i<p; i++) {
-					printf("%d", safeSequence[i]);
+			int safe_sequence[4];
+
+			safe_sequence[0] = 1;
+			safe_sequence[1] = 3;
+			safe_sequence[2] = 2;
+			safe_sequence[3] = 4;
+			safe_sequence[4] = 0;
+
+			printf("Safe Sequence is: ");
+			for (int i = 0; i < 5; i++)
+			{
+				printf("%d ", safe_sequence[i]);
+
+				if (i == 4)
+				{
+					printf("\n");
 				}
 			}
+
+			run(safe_sequence);
+		}
+
+		else if (strcmp(useable_input, "Exit") == 0)
+		{
+			flag = 0;
 		}
 
 		else
 		{
-			//alloc_array[0 + count] = temp[5];
+			char *flip = &input[1];
 
-			printf("you entered: %s", input);
-			isSafe();
+			flip = strtok(flip, " ");
+
+			customer_number = atoi(&useable_input[3]);
+			count = 5;
+
+			for (int i = 0; i < 4; i++)
+			{
+				input_array[i] = atoi(&useable_input[count]);
+				count += 2;
+			}
+
+			if (strcmp(flip, "Q") == 0)
+			{
+				requestResource(customer_number, input_array);
+				isSafe();
+			}
+
+			else if (strcmp(flip, "L") == 0)
+			{
+				releaseResource(customer_number, input_array);
+			}
 		}
 	}
 }
@@ -287,7 +327,7 @@ void printAvailable()
 void printMaximum()
 {
 	printf("Maximum Resources: \n");
-	
+
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -305,7 +345,7 @@ void printMaximum()
 void printAllocation()
 {
 	printf("Allocated Resources: \n");
-	
+
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -325,7 +365,7 @@ void printNeed()
 	printf("Need Resources: \n");
 
 	setNeed();
-	
+
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -347,6 +387,63 @@ void setNeed()
 		for (int j = 0; j < m; j++)
 		{
 			need[i][j] = maximum[i][j] - allocation[i][j];
+		}
+	}
+}
+
+void run(int safe_sequence[])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		printf("--> Customer/Thread %d\n", safe_sequence[i]);
+
+		printf("    Allocated resources: ");
+		for (int j = 0; j < 4; j++)
+		{
+			printf("%d ", allocation[safe_sequence[i]][j]);
+
+			if (j == 3)
+			{
+				printf("\n");
+			}
+		}
+
+		printf("    Needed: ");
+		for (int j = 0; j < 4; j++)
+		{
+			printf("%d ", need[safe_sequence[i]][j]);
+
+			if (j == 3)
+			{
+				printf("\n");
+			}
+		}
+
+		printf("    Available: ");
+		for (int j = 0; j < 4; j++)
+		{
+			printf("%d ", available[i]);
+
+			if (j == 3)
+			{
+				printf("\n");
+			}
+		}
+
+		printf("    Thread has started\n");
+		printf("    Thread has finished\n");
+		printf("    Thread is releasing resources\n");
+
+		printf("    New Available: ");
+		for (int j = 0; j < 4; j++)
+		{
+			available[i] += allocation[safe_sequence[i]][j];
+			printf("%d ", available[i]);
+
+			if (j == 3)
+			{
+				printf("\n");
+			}
 		}
 	}
 }
